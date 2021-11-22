@@ -42,22 +42,23 @@ App = {
       alert('You need to have Metamask installed and enabled');
     }
 
-    web3 = new Web3(App.web3Provider);
-
     return App.initContract();
   },
 
   initContract: function() {
-    /*
-     * Replace me...
-     */
-    console.log('Iniciar contratos');
+    $.getJSON('Adoption.json' , function(data) {
+      var AdoptionArtifact = data;
+      App.contracts.Adoption = TruffleContract(AdoptionArtifact);
+
+      App.contracts.Adoption.setProvider(App.web3Provider);
+
+      return App.markAdopted();
+    });
 
     return App.bindEvents();
   },
 
   bindEvents: function() {
-    console.log('Crear eventos');
     $(document).on('click', '.btn-adopt', App.handleAdopt);
   },
 
@@ -65,17 +66,44 @@ App = {
     /*
      * Replace me...
      */
-    console.log('marcar como Adoptado!');
+    App.contracts.Adoption.deployed().then(function(instance) {
+      adoptionInstance = instance;
+      return adoptionInstance.getAdopters().call();
+    }).then(function(adopters) {
+      for (i = 0; i < adopters.length; i++) {
+        if(adopters[i] !== '0x0') {
+          $('.panel-pet').eq(i).find(
+            'button'
+          ).text('Ya esta adoptado').attr('disabled', true);
+        }
+      }
+    }).catch(function(error) {
+      console.log(error.message);
+    });
   },
 
   handleAdopt: function(event) {
     event.preventDefault();
 
     var petId = parseInt($(event.target).data('id'));
-    console.log(`Adoptado! ${petId}`);
-    /*
-     * Replace me...
-     */
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      console.log(`ACCOUNT: ${account}`);
+
+      App.contracts.Adoption.deployed().then(function(instance) {
+        adoptionInstance = instance;
+        return adoptionInstance.adopt(petId, {from: account})
+      }).then(function(result) {
+        return App.markAdopted();
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
   }
 
 };
