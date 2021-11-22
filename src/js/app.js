@@ -19,6 +19,7 @@ App = {
         petsRow.append(petTemplate.html());
       }
     });
+    console.log('Init');
 
     return await App.initWeb3();
   },
@@ -27,6 +28,21 @@ App = {
     /*
      * Replace me...
      */
+    console.log('Web3');
+
+    if (window.ethereum) {
+      App.web3Provider = window.ethereum;
+
+      try {
+        await window.ethereum.request({ method: "eth_requestAccounts"});
+      } catch(error) {
+        alert('You need to give access in order to use the site!');
+      }
+    } else {
+      alert('You need to have Metamask installed and enabled');
+    }
+
+    web3 = new Web3(App.web3Provider);
 
     return App.initContract();
   },
@@ -35,11 +51,13 @@ App = {
     /*
      * Replace me...
      */
+    console.log('Iniciar contratos');
 
     return App.bindEvents();
   },
 
   bindEvents: function() {
+    console.log('Crear eventos');
     $(document).on('click', '.btn-adopt', App.handleAdopt);
   },
 
@@ -47,13 +65,14 @@ App = {
     /*
      * Replace me...
      */
+    console.log('marcar como Adoptado!');
   },
 
   handleAdopt: function(event) {
     event.preventDefault();
 
     var petId = parseInt($(event.target).data('id'));
-
+    console.log(`Adoptado! ${petId}`);
     /*
      * Replace me...
      */
