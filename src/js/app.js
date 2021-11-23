@@ -3,23 +3,6 @@ App = {
   contracts: {},
 
   init: async function() {
-    $.getJSON('../cards.json', function(data) {
-      var cardsRow = $('#cardsRow');
-      var cardTemplate = $('#cardTemplate');
-
-      for (i = 0; i < data.length; i ++) {
-        cardTemplate.find('.card-title').text(data[i].name);
-        cardTemplate.find('img').attr('src', data[i].avatar);
-        cardTemplate.find('.card-id').text(data[i].id);
-        cardTemplate.find('.card-price').text(data[i].price);
-        cardTemplate.find('.card-description').text(data[i].description);
-        cardTemplate.find('.btn-buy').attr('data-id', data[i].id);
-
-        cardsRow.append(cardTemplate.html());
-      }
-    });
-    console.log('Init');
-
     return await App.initWeb3();
   },
 
@@ -52,31 +35,34 @@ App = {
   },
 
   bindEvents: function() {
-    console.log('Events');
-    // $(document).on('click', '.btn-adopt', App.handleAdopt);
     $('#create-card-button').click(function(e) {
       e.preventDefault();
+
       const name = $('input[name="name"]').val();
       const description = $('input[name="description"]').val();
       const price = $('input[name="price"]').val();
-      console.log(`Name: ${name} description: ${description} price: ${price}`);
+
       App.createCard(name, description, price);
+    });
+
+    $(document).on('click', '.btn-buy', function(e) {
+      const cardId = $(this).data('id');
+      const cardPrice = $(this).data('price');
+      App.buyCard(cardId, cardPrice);
     });
   },
 
   createCard: function(name, description, price) {
-    console.log('Carta creada!');
-
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
         console.log(error);
       }
 
       var account = accounts[0];
-      console.log(`ACCOUNT: ${account}`);
 
       App.contracts.CardFactory.deployed().then(function(instance) {
         cardInstance = instance;
+
         return cardInstance.generateCard(
           name, description, price, {from: account});
       }).then(function(result) {
@@ -87,16 +73,61 @@ App = {
     });
   },
 
-  buyCard: function() {
-    // TODO Tomar el ID de la carta actual
-    // TODO Elegir la cuenta de ETH que va a pagar
-    // TODO Llamar al smart contract con el value de la carta
+  buyCard: function(cardIndex, cardPrice) {
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+
+      App.contracts.CardFactory.deployed().then(function(instance) {
+        cardInstance = instance;
+        console.log(cardPrice);
+
+        return cardInstance.buyCard(
+          cardIndex, {from: account, value: web3.eth.toWei(cardPrice, 'ether')});
+      }).then(function(result) {
+        return App.updateCardList();
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
   },
 
   updateCardList: function() {
-    // TODO Mostrar las cartas nuevas
-    console.log('Updated!');
-  }
+    App.contracts.CardFactory.deployed().then(function(instance) {
+      cardInstance = instance;
+      return cardInstance.getCardsCounter.call();
+    }).then(function(counter) {
+      // TODO Provisional
+      // TODO Mostrar solo los nuevos
+      var cardsRow = $('#cardsRow');
+      var cardTemplate = $('#cardTemplate');
+      $('#cardsRow').empty();
+
+      for(let index = 0; index < counter; index++) {
+        App.contracts.CardFactory.deployed().then(function(instance) {
+          cardInstance = instance;
+          return cardInstance.cards.call(index);
+        }).then(function(card) {
+
+          cardTemplate.find('.card-title').text(card[1]);
+          cardTemplate.find('img').attr('src', `https://avatars.dicebear.com/api/human/${card[3]}.svg`);
+          cardTemplate.find('.card-id').text(card[0]);
+          cardTemplate.find('.card-price').text(card[4]);
+          cardTemplate.find('.card-description').text(card[2]);
+          cardTemplate.find(
+            '.btn-buy'
+          ).attr(
+            'data-id', card[0]
+          ).attr('data-price', card[4]);
+
+          cardsRow.append(cardTemplate.html());
+        });
+      }
+    });
+  },
 };
 
 $(function() {

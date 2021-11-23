@@ -54,7 +54,6 @@ contract CardFactory {
 
         Card storage card = cards[_cardIndex];
 
-        // TODO Podriamos hacer que el seller sea el nuevo buyer
         require(card.buyer == 0x0000000000000000000000000000000000000000);
         require(msg.sender != card.seller);
         require(msg.value == card.price);
