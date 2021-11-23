@@ -40,14 +40,13 @@ App = {
   },
 
   initContract: function() {
-    /* $.getJSON('Adoption.json' , function(data) {
-      var AdoptionArtifact = data;
-      App.contracts.Adoption = TruffleContract(AdoptionArtifact);
+    $.getJSON('CardFactory.json' , function(data) {
+      var CardFactoryArtifact = data;
+      App.contracts.CardFactory = TruffleContract(CardFactoryArtifact);
+      App.contracts.CardFactory.setProvider(App.web3Provider);
 
-      App.contracts.Adoption.setProvider(App.web3Provider);
-
-      return App.markAdopted();
-    }); */
+      return App.updateCardList();
+    });
 
     return App.bindEvents();
   },
@@ -67,8 +66,7 @@ App = {
 
   createCard: function(name, description, price) {
     console.log('Carta creada!');
-    // TODO Codigo del smart contract
-    /*
+
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
         console.log(error);
@@ -77,21 +75,27 @@ App = {
       var account = accounts[0];
       console.log(`ACCOUNT: ${account}`);
 
-      App.contracts.Adoption.deployed().then(function(instance) {
-        adoptionInstance = instance;
-        return adoptionInstance.adopt(petId, {from: account})
+      App.contracts.CardFactory.deployed().then(function(instance) {
+        cardInstance = instance;
+        return cardInstance.generateCard(
+          name, description, price, {from: account});
       }).then(function(result) {
-        return App.markAdopted();
+        return App.updateCardList();
       }).catch(function(err) {
         console.log(err.message);
       });
-    }); */
+    });
   },
 
   buyCard: function() {
     // TODO Tomar el ID de la carta actual
     // TODO Elegir la cuenta de ETH que va a pagar
     // TODO Llamar al smart contract con el value de la carta
+  },
+
+  updateCardList: function() {
+    // TODO Mostrar las cartas nuevas
+    console.log('Updated!');
   }
 };
 

@@ -4,18 +4,21 @@ contract CardFactory {
     uint dnaDigits = 24;
     uint dnaModulus = 10 ** dnaDigits;
 
-    event NewCard(string _name, uint price);
+    event NewCard(string _name, uint price, uint _dna);
+    event NewCardPayment(uint _cardIndex);
 
     struct Card {
+        uint id;
         string name;
         string description;
         uint dna;
         uint price;
+        address payable seller;
+        address payable buyer;
     }
 
-    Card[] cards;
-
-    mapping (uint => address) public cardToOwner;
+    uint cardCounter;
+    mapping (uint => Card) public cards;
 
     function generateCard(string memory _name, string memory _description, uint _price) public {
         uint randDna = _generateRandomDna(_name);
@@ -23,9 +26,18 @@ contract CardFactory {
     }
 
     function _createCard(string memory _name, string memory _description, uint _price, uint _dna) private {
-        uint id = cards.push(Card(_name, _description, _dna, _price)) - 1;
-        cardToOwner[id] = msg.sender;
-        emit NewCard(_name, _price);
+        cardCounter++;
+        cards[cardCounter] = Card(
+            cardCounter,
+            _name,
+            _description,
+            _dna,
+            _price,
+            msg.sender,
+            0x0000000000000000000000000000000000000000
+        );
+
+        emit NewCard(_name, _price, _dna);
     }
 
     function _generateRandomDna(string memory _name) private view returns (uint) {
@@ -33,9 +45,24 @@ contract CardFactory {
         return rand % dnaModulus;
     }
 
-    // TODO Get the data
-    // function getCards() public view returns (Card[] memory) {
-    //     return cards;
-    // }
+    function getCardsCounter() public view returns (uint) {
+        return cardCounter;
+    }
+
+    function buyCard(uint _cardIndex) payable public {
+        require(_cardIndex > 0 && _cardIndex <= cardCounter);
+
+        Card storage card = cards[_cardIndex];
+
+        // TODO Podriamos hacer que el seller sea el nuevo buyer
+        require(card.buyer == 0x0000000000000000000000000000000000000000);
+        require(msg.sender != card.seller);
+        require(msg.value == card.price);
+
+        card.buyer = msg.sender;
+        card.seller.transfer(msg.value);
+
+        emit NewCardPayment(_cardIndex);
+    }
 }
 
