@@ -1,0 +1,44 @@
+[
+  {
+    "id": "412a14cc-2937-4332-b044-a5cf367333ad",
+    "name": "Espinete",
+    "description": "mi nueva descripcion",
+    "price": 0.98,
+    "avatar": "https://avatars.dicebear.com/api/human/412a14cc-2937-4332-b044-a5cf367333ad.svg"
+  },
+  {
+    "id": "b961c0ac-19f4-487d-9ce6-c38eadfd0080",
+    "name": "la de la verdad",
+    "description": "das",
+    "price": "102",
+    "avatar": "https://avatars.dicebear.com/api/human/b961c0ac-19f4-487d-9ce6-c38eadfd0080.svg"
+  },
+  {
+    "id": "adaee921-6f0f-492c-93ad-c89ff86cd9cd",
+    "name": "la primera que se va a borrar",
+    "description": "borrame",
+    "price": "0.32",
+    "avatar": "https://avatars.dicebear.com/api/human/adaee921-6f0f-492c-93ad-c89ff86cd9cd.svg"
+  },
+  {
+    "id": "260dab88-c44f-42b7-aeec-05de5d9f4d8f",
+    "name": "djskajlka",
+    "description": "dsadsad",
+    "price": "0.12",
+    "avatar": "https://avatars.dicebear.com/api/human/260dab88-c44f-42b7-aeec-05de5d9f4d8f.svg"
+  },
+  {
+    "id": "e88525ad-eafa-41b6-8ce9-a73d060c545e",
+    "name": "",
+    "description": "",
+    "price": "",
+    "avatar": "https://avatars.dicebear.com/api/human/e88525ad-eafa-41b6-8ce9-a73d060c545e.svg"
+  },
+  {
+    "id": "9fca1641-cb99-4e05-919f-3ce02030133b",
+    "name": "perrro",
+    "description": "desccc",
+    "price": "12",
+    "avatar": "https://avatars.dicebear.com/api/human/9fca1641-cb99-4e05-919f-3ce02030133b.svg"
+  }
+]

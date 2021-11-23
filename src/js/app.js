@@ -3,20 +3,19 @@ App = {
   contracts: {},
 
   init: async function() {
-    // Load pets.
-    $.getJSON('../pets.json', function(data) {
-      var petsRow = $('#petsRow');
-      var petTemplate = $('#petTemplate');
+    $.getJSON('../cards.json', function(data) {
+      var cardsRow = $('#cardsRow');
+      var cardTemplate = $('#cardTemplate');
 
       for (i = 0; i < data.length; i ++) {
-        petTemplate.find('.panel-title').text(data[i].name);
-        petTemplate.find('img').attr('src', data[i].picture);
-        petTemplate.find('.pet-breed').text(data[i].breed);
-        petTemplate.find('.pet-age').text(data[i].age);
-        petTemplate.find('.pet-location').text(data[i].location);
-        petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
+        cardTemplate.find('.panel-title').text(data[i].name);
+        cardTemplate.find('img').attr('src', data[i].avatar);
+        cardTemplate.find('.card-id').text(data[i].id);
+        cardTemplate.find('.card-price').text(data[i].price);
+        cardTemplate.find('.card-description').text(data[i].description);
+        cardTemplate.find('.btn-adopt').attr('data-id', data[i].id);
 
-        petsRow.append(petTemplate.html());
+        cardsRow.append(cardTemplate.html());
       }
     });
     console.log('Init');
@@ -25,11 +24,6 @@ App = {
   },
 
   initWeb3: async function() {
-    /*
-     * Replace me...
-     */
-    console.log('Web3');
-
     if (window.ethereum) {
       App.web3Provider = window.ethereum;
 
@@ -46,23 +40,24 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON('Adoption.json' , function(data) {
+    /* $.getJSON('Adoption.json' , function(data) {
       var AdoptionArtifact = data;
       App.contracts.Adoption = TruffleContract(AdoptionArtifact);
 
       App.contracts.Adoption.setProvider(App.web3Provider);
 
       return App.markAdopted();
-    });
+    }); */
 
     return App.bindEvents();
   },
 
   bindEvents: function() {
-    $(document).on('click', '.btn-adopt', App.handleAdopt);
+    console.log('Events');
+    // $(document).on('click', '.btn-adopt', App.handleAdopt);
   },
 
-  markAdopted: function() {
+  /* markAdopted: function() {
     App.contracts.Adoption.deployed().then(function(instance) {
       adoptionInstance = instance;
 
@@ -102,7 +97,7 @@ App = {
         console.log(err.message);
       });
     });
-  }
+  } */
 
 };
 
