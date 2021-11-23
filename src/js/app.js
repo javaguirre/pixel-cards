@@ -86,7 +86,7 @@ App = {
         console.log(cardPrice);
 
         return cardInstance.buyCard(
-          cardIndex, {from: account, value: web3.eth.toWei(cardPrice, 'ether')});
+          cardIndex, {from: account, value: web3.toWei(cardPrice, 'ether')});
       }).then(function(result) {
         return App.updateCardList();
       }).catch(function(err) {
@@ -116,7 +116,7 @@ App = {
           cardTemplate.find('img').attr('src', `https://avatars.dicebear.com/api/human/${card[3]}.svg`);
           cardTemplate.find('.card-id').text(card[0]);
           cardTemplate.find('.card-price').text(card[4]);
-          cardTemplate.find('.card-description').text(card[2]);
+          cardTemplate.find('.card-description').text(`${card[2]} ${card[5]}`);
           cardTemplate.find(
             '.btn-buy'
           ).attr(
