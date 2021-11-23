@@ -8,12 +8,12 @@ App = {
       var cardTemplate = $('#cardTemplate');
 
       for (i = 0; i < data.length; i ++) {
-        cardTemplate.find('.panel-title').text(data[i].name);
+        cardTemplate.find('.card-title').text(data[i].name);
         cardTemplate.find('img').attr('src', data[i].avatar);
         cardTemplate.find('.card-id').text(data[i].id);
         cardTemplate.find('.card-price').text(data[i].price);
         cardTemplate.find('.card-description').text(data[i].description);
-        cardTemplate.find('.btn-adopt').attr('data-id', data[i].id);
+        cardTemplate.find('.btn-buy').attr('data-id', data[i].id);
 
         cardsRow.append(cardTemplate.html());
       }
@@ -102,7 +102,7 @@ App = {
 };
 
 $(function() {
-  $(window).load(function() {
+  $(window).on("load", function() {
     App.init();
   });
 });
