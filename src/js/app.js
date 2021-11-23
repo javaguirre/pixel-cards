@@ -55,31 +55,20 @@ App = {
   bindEvents: function() {
     console.log('Events');
     // $(document).on('click', '.btn-adopt', App.handleAdopt);
-  },
-
-  /* markAdopted: function() {
-    App.contracts.Adoption.deployed().then(function(instance) {
-      adoptionInstance = instance;
-
-      return adoptionInstance.getAdopters.call();
-    }).then(function(adopters) {
-      for (i = 0; i < adopters.length; i++) {
-        if(adopters[i] !== '0x0000000000000000000000000000000000000000') {
-          $('.panel-pet').eq(i).find(
-            'button'
-          ).text('Ya esta adoptado').attr('disabled', true);
-        }
-      }
-    }).catch(function(error) {
-      console.log(error.message);
+    $('#create-card-button').click(function(e) {
+      e.preventDefault();
+      const name = $('input[name="name"]').val();
+      const description = $('input[name="description"]').val();
+      const price = $('input[name="price"]').val();
+      console.log(`Name: ${name} description: ${description} price: ${price}`);
+      App.createCard(name, description, price);
     });
   },
 
-  handleAdopt: function(event) {
-    event.preventDefault();
-
-    var petId = parseInt($(event.target).data('id'));
-
+  createCard: function(name, description, price) {
+    console.log('Carta creada!');
+    // TODO Codigo del smart contract
+    /*
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
         console.log(error);
@@ -96,9 +85,14 @@ App = {
       }).catch(function(err) {
         console.log(err.message);
       });
-    });
-  } */
+    }); */
+  },
 
+  buyCard: function() {
+    // TODO Tomar el ID de la carta actual
+    // TODO Elegir la cuenta de ETH que va a pagar
+    // TODO Llamar al smart contract con el value de la carta
+  }
 };
 
 $(function() {
