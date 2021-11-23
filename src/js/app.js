@@ -63,15 +63,13 @@ App = {
   },
 
   markAdopted: function() {
-    /*
-     * Replace me...
-     */
     App.contracts.Adoption.deployed().then(function(instance) {
       adoptionInstance = instance;
-      return adoptionInstance.getAdopters().call();
+
+      return adoptionInstance.getAdopters.call();
     }).then(function(adopters) {
       for (i = 0; i < adopters.length; i++) {
-        if(adopters[i] !== '0x0') {
+        if(adopters[i] !== '0x0000000000000000000000000000000000000000') {
           $('.panel-pet').eq(i).find(
             'button'
           ).text('Ya esta adoptado').attr('disabled', true);
