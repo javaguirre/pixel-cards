@@ -116,7 +116,7 @@ App = {
           cardTemplate.find('img').attr('src', `https://avatars.dicebear.com/api/human/${card[3]}.svg`);
           cardTemplate.find('.card-id').text(card[0]);
           cardTemplate.find('.card-price').text(card[4]);
-          cardTemplate.find('.card-description').text(`${card[2]} ${card[5]}`);
+          cardTemplate.find('.card-description').text(`${card[2]} Seller: ${card[5]} Buyer: ${card[6]}`);
           cardTemplate.find(
             '.btn-buy'
           ).attr(
