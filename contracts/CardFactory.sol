@@ -1,10 +1,10 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.0;
 
 contract CardFactory {
     uint dnaDigits = 24;
     uint dnaModulus = 10 ** dnaDigits;
 
-    event NewCard(string _name, uint price, uint _dna);
+    event NewCard(uint id, string _name, uint price, uint _dna);
     event NewCardPayment(uint _cardIndex);
 
     struct Card {
@@ -26,18 +26,20 @@ contract CardFactory {
     }
 
     function _createCard(string memory _name, string memory _description, uint _price, uint _dna) private {
-        cardCounter++;
-        cards[cardCounter] = Card(
+        Card memory card = Card(
             cardCounter,
             _name,
             _description,
             _dna,
             _price,
-            msg.sender,
-            address(0)
+            payable(msg.sender),
+            payable(0)
         );
+        cards[cardCounter] = card;
 
-        emit NewCard(_name, _price, _dna);
+        emit NewCard(cardCounter, _name, _price, _dna);
+
+        cardCounter++;
     }
 
     function _generateRandomDna(string memory _name) private view returns (uint) {
@@ -50,15 +52,15 @@ contract CardFactory {
     }
 
     function buyCard(uint _cardIndex) payable public {
-        require(_cardIndex > 0 && _cardIndex <= cardCounter);
+        require(_cardIndex >= 0 && _cardIndex <= cardCounter);
 
         Card storage card = cards[_cardIndex];
 
-        require(card.buyer == address(0));
-        require(msg.sender != card.seller);
-        require(msg.value >= card.price);
+        // require(card.buyer == payable(0));
+        // require(msg.sender != card.seller);
+        // require(msg.value >= card.price);
 
-        card.buyer = msg.sender;
+        card.buyer = payable(msg.sender);
         card.seller.transfer(msg.value);
 
         emit NewCardPayment(_cardIndex);
