@@ -34,7 +34,7 @@ contract CardFactory {
             _dna,
             _price,
             msg.sender,
-            0x0000000000000000000000000000000000000000
+            address(0)
         );
 
         emit NewCard(_name, _price, _dna);
@@ -54,9 +54,9 @@ contract CardFactory {
 
         Card storage card = cards[_cardIndex];
 
-        require(card.buyer == 0x0000000000000000000000000000000000000000);
+        require(card.buyer == address(0));
         require(msg.sender != card.seller);
-        require(msg.value == card.price);
+        require(msg.value >= card.price);
 
         card.buyer = msg.sender;
         card.seller.transfer(msg.value);
