@@ -1,6 +1,8 @@
 pragma solidity ^0.8.0;
 
 contract CardFactory {
+    address payable private _owner;
+
     uint dnaDigits = 24;
     uint dnaModulus = 10 ** dnaDigits;
 
@@ -20,6 +22,22 @@ contract CardFactory {
     uint cardCounter;
     mapping (uint => Card) public cards;
 
+    constructor() {
+        _owner = payable(msg.sender);
+    }
+
+    modifier onlyOwner() {
+        require(isOwner());
+        _;
+    }
+
+    function isOwner() public view returns(bool) {
+        return msg.sender == _owner;
+    }
+
+    function withdraw() external onlyOwner {
+        _owner.transfer(address(this).balance);
+    }
     function generateCard(string memory _name, string memory _description, uint _price) public {
         uint randDna = _generateRandomDna(_name);
         _createCard(_name, _description, _price, randDna);
@@ -56,9 +74,9 @@ contract CardFactory {
 
         Card storage card = cards[_cardIndex];
 
-        // require(card.buyer == payable(0));
-        // require(msg.sender != card.seller);
-        // require(msg.value >= card.price);
+        require(card.buyer == payable(0));
+        require(msg.sender != card.seller);
+        require(msg.value >= card.price);
 
         card.buyer = payable(msg.sender);
         card.seller.transfer(msg.value);
