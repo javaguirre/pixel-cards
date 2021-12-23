@@ -8,7 +8,7 @@ function CardList({ cards }: Props) {
   return (
     <ul>
       {cards.map(card => (
-        <li key={card.id}>{card.id} {card.name}</li>
+        <li key={card.id}>{card.id} {card.name} {card.price}</li>
       ))}
     </ul>
   )

@@ -1,10 +1,11 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import { ethers } from "ethers"
+import { ethers } from 'ethers'
 
 import { Card } from '../interfaces';
 import CardList from '../components/cardlist';
 import CardCreate from '../components/cardcreate';
+import EthersClient from '../services/ethersclient';
 
 type Props = {
   cards: Card[],
@@ -43,23 +44,26 @@ const Home = ({cards, currentAccount}: Props) => {
 
 export async function getStaticProps() {
   let cards = []
-  const provider = new ethers.providers.JsonRpcProvider('http://localhost:7545')
+  let cardFromSmartContract
+  const ethersClient = new EthersClient('http://localhost:7545')
+  const counter = await ethersClient.contract.getCardsCounter()
 
-  const currentAccount = await provider.listAccounts();
-
-  const address = '0xD22a947b83AE7ce6Bf9092431c94C39c68C88002'
-  const artifact = require('../build/contracts/CardFactory.json')
-  const contract = new ethers.Contract(address, artifact.abi, provider)
-
-  const counter = await contract.getCardsCounter()
-
-  for(let index = 0; index < counter; index++)
-    cards.push(await contract.cards[index])
+  for(let index = 0; index < counter; index++) {
+    cardFromSmartContract = await ethersClient.contract.cards(index)
+    cards.push(
+      {
+        id: cardFromSmartContract[0].toNumber(),
+        name: cardFromSmartContract[1],
+        description: cardFromSmartContract[2],
+        price: ethers.utils.formatEther(cardFromSmartContract[3])
+      }
+    )
+  }
 
   return {
     props: {
       cards,
-      currentAccount
+      currentAccount: await ethersClient.getCurrentAccount()
     },
   }
 }

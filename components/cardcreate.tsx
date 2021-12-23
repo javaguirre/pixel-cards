@@ -1,5 +1,7 @@
-
 import { useState } from 'react'
+
+import EthersClient from '../services/ethersclient'
+
 
 function CardCreate() {
   const [cardData, setCardData] = useState({
@@ -16,6 +18,12 @@ function CardCreate() {
 
   const sendCardData = (event) => {
     event.preventDefault();
+
+    const ethersClient = new EthersClient('http://localhost:7545')
+    const signer = ethersClient.contract.connect(ethersClient.provider.getSigner())
+    signer.generateCard(cardData.name, 'description', cardData.price).then(
+        result => console.log(result)
+    )
   }
 
   return (
