@@ -2,8 +2,11 @@ import { useState } from 'react'
 
 import EthersClient from '../services/ethersclient'
 
+type Props = {
+  handleCreateCard: React.FormEvent
+}
 
-function CardCreate() {
+function CardCreate({ handleCreateCard }) {
   const [cardData, setCardData] = useState({
     name: '',
     price: ''
@@ -16,18 +19,13 @@ function CardCreate() {
       })
   }
 
-  const sendCardData = (event) => {
-    event.preventDefault();
-
-    const ethersClient = new EthersClient(window.ethereum)
-    const signer = ethersClient.contract.connect(ethersClient.provider.getSigner())
-    signer.generateCard(cardData.name, 'description', cardData.price).then(
-        result => console.log(result)
-    )
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    handleCreateCard(cardData)
   }
 
   return (
-    <form onSubmit={sendCardData}>
+    <form onSubmit={handleSubmit}>
         Name: <input type="text" name="name" onChange={handleInputChange} />
         Price: <input type="text" name="price" onChange={handleInputChange} />
 

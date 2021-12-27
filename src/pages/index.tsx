@@ -36,6 +36,14 @@ const Home = () => {
     }).catch(error => console.log(error))
   }, [cards])
 
+  const handleCreateCard = (cardData) => {
+    const ethersClient = new EthersClient(window.ethereum)
+    const signer = ethersClient.contract.connect(ethersClient.provider.getSigner())
+    signer.generateCard(cardData.name, 'description', cardData.price).then(
+        () => setCards([])  // TODO We can't get only one now, so we trigger reload
+    )
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -50,7 +58,7 @@ const Home = () => {
         </h1>
 
         <div>
-          <CardCreate />
+          <CardCreate handleCreateCard={handleCreateCard} />
         </div>
 
         <p>{currentAccount}</p>
