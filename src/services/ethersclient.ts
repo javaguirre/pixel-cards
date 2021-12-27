@@ -1,11 +1,11 @@
 import { ethers } from "ethers";
 
 class EthersClient {
-    provider: ethers.providers.JsonRpcProvider;
+    provider: ethers.providers.Web3Provider;
     contract: ethers.Contract;
 
-    constructor(rpcServer: string) {
-      this.provider = new ethers.providers.JsonRpcProvider(rpcServer);
+    constructor(rpcServer: any) {
+      this.provider = new ethers.providers.Web3Provider(rpcServer);
       this.contract = this.initContract()
     }
 
@@ -14,10 +14,6 @@ class EthersClient {
         const artifact = require('../../build/contracts/CardFactory.json')
 
         return new ethers.Contract(address, artifact.abi, this.provider)
-    }
-
-    async getCurrentAccount() {
-        return await this.provider.listAccounts();
     }
 }
 

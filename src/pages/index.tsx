@@ -1,17 +1,41 @@
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
-import { Card } from '../interfaces';
 import CardList from '../components/cardlist';
 import CardCreate from '../components/cardcreate';
 import EthersClient from '../services/ethersclient';
+import CardService from '../services/cardservice';
 
-type Props = {
-  cards: Card[],
-  currentAccount: string
-}
+const Home = () => {
+  const [cards, setCards] = useState([])
+  const [currentAccount, setCurrentAccount] = useState('')
 
-const Home = ({cards, currentAccount}: Props) => {
+  useEffect(() => {
+    const ethersClient = new EthersClient(window.ethereum)
+
+    ethersClient.provider.send("eth_requestAccounts", []).then(() => {
+      const signer = ethersClient.provider.getSigner();
+      return signer.getAddress()
+    }).then(address => setCurrentAccount(address));
+  }, [currentAccount]);
+
+  useEffect(() => {
+    const ethersClient = new EthersClient(window.ethereum)
+
+    ethersClient.contract.getCardsCounter().then(counter => {
+      const cardPromises = [...Array(counter.toNumber()).keys()].map(
+        index => ethersClient.contract.cards(index))
+
+      Promise.all(cardPromises).then(cardResult => {
+        return cardResult.map(
+          cardFromSmartContract => CardService.transformToCard(cardFromSmartContract)
+        )
+      }).then(currentCards => cards.length !== currentCards.length ?
+              setCards(currentCards) : '')
+    }).catch(error => console.log(error))
+  }, [cards])
+
   return (
     <div className={styles.container}>
       <Head>
@@ -39,35 +63,6 @@ const Home = ({cards, currentAccount}: Props) => {
       <footer className={styles.footer}></footer>
     </div>
   )
-}
-
-export async function getStaticProps() {
-  let cards = []
-  let cardFromSmartContract
-  const ethersClient = new EthersClient('http://localhost:7545')
-  const counter = await ethersClient.contract.getCardsCounter()
-
-  for(let index = 0; index < counter; index++) {
-    cardFromSmartContract = await ethersClient.contract.cards(index)
-    cards.push(
-      {
-        id: cardFromSmartContract[0].toNumber(),
-        name: cardFromSmartContract[1],
-        description: cardFromSmartContract[2],
-        dna: cardFromSmartContract[3].toString(),
-        price: cardFromSmartContract[4].toNumber(),
-        seller: cardFromSmartContract[5],
-        buyer: cardFromSmartContract[6]
-      }
-    )
-  }
-
-  return {
-    props: {
-      cards,
-      currentAccount: await ethersClient.getCurrentAccount()
-    },
-  }
 }
 
 export default Home

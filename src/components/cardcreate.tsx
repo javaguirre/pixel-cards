@@ -19,7 +19,7 @@ function CardCreate() {
   const sendCardData = (event) => {
     event.preventDefault();
 
-    const ethersClient = new EthersClient('http://localhost:7545')
+    const ethersClient = new EthersClient(window.ethereum)
     const signer = ethersClient.contract.connect(ethersClient.provider.getSigner())
     signer.generateCard(cardData.name, 'description', cardData.price).then(
         result => console.log(result)
