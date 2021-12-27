@@ -1,16 +1,18 @@
 import { Card } from '../interfaces'
 
+import CardItem from './carditem'
+
 type Props = {
   cards: Card[]
 }
 
 function CardList({ cards }: Props) {
   return (
-    <ul>
+    <div>
       {cards.map(card => (
-        <li key={card.id}>{card.id} {card.name} {card.price}</li>
+        <CardItem key={card.id} card={card} />
       ))}
-    </ul>
+    </div>
   )
 }
 

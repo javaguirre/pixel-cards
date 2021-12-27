@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import { ethers } from 'ethers'
 
 import { Card } from '../interfaces';
 import CardList from '../components/cardlist';
@@ -55,7 +54,10 @@ export async function getStaticProps() {
         id: cardFromSmartContract[0].toNumber(),
         name: cardFromSmartContract[1],
         description: cardFromSmartContract[2],
-        price: ethers.utils.formatEther(cardFromSmartContract[3])
+        dna: cardFromSmartContract[3].toString(),
+        price: cardFromSmartContract[4].toNumber(),
+        seller: cardFromSmartContract[5],
+        buyer: cardFromSmartContract[6]
       }
     )
   }
