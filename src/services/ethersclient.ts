@@ -11,7 +11,7 @@ class EthersClient {
 
     initContract() {
         const address = '0xD22a947b83AE7ce6Bf9092431c94C39c68C88002'
-        const artifact = require('../build/contracts/CardFactory.json')
+        const artifact = require('../../build/contracts/CardFactory.json')
 
         return new ethers.Contract(address, artifact.abi, this.provider)
     }
