@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import { useStyletron } from 'baseui'
 
-import CardList from '../components/cardlist';
-import CardCreate from '../components/cardcreate';
-import EthersClient from '../services/ethersclient';
-import CardService from '../services/cardservice';
+import CardList from '../components/cardlist'
+import CardCreate from '../components/cardcreate'
+import EthersClient from '../services/ethersclient'
+import CardService from '../services/cardservice'
 
 const Home = () => {
+  const [css, theme] = useStyletron();
   const [cards, setCards] = useState([])
   const [currentAccount, setCurrentAccount] = useState('')
 
@@ -45,15 +46,15 @@ const Home = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Pixel Cards</title>
         <meta name="description" content="Pixel Cards" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
+      <main>
+        <h1>
           Pixel Cards
         </h1>
 
@@ -61,14 +62,14 @@ const Home = () => {
           <CardCreate handleCreateCard={handleCreateCard} />
         </div>
 
-        <p>{currentAccount}</p>
+        <p className={css({color: theme.colors.accent600})}>{currentAccount}</p>
 
-        <div className={styles.description}>
+        <div>
           <CardList cards={cards} />
         </div>
       </main>
 
-      <footer className={styles.footer}></footer>
+      <footer></footer>
     </div>
   )
 }
