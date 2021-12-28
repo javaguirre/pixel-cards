@@ -40,6 +40,10 @@ contract CardFactory {
         _owner.transfer(address(this).balance);
     }
 
+    function getBalance() external view onlyOwner returns (uint) {
+        return address(this).balance;
+    }
+
     function generateCard(string memory _name, string memory _description, uint _price) public returns (uint) {
         uint randDna = _generateRandomDna(_name);
         return _createCard(_name, _description, _price, randDna);
