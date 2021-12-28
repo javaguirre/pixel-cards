@@ -45,6 +45,14 @@ const Home = () => {
     )
   }
 
+  const handleBuy = (card) => {
+    const ethersClient = new EthersClient(window.ethereum)
+    const signer = ethersClient.contract.connect(ethersClient.provider.getSigner())
+    signer.buyCard(card.id, {from: currentAccount, value: card.price}).then(
+        () => setCards([])  // TODO We can't get only one now, so we trigger reload
+    )
+  }
+
   return (
     <div>
       <Head>
@@ -65,7 +73,7 @@ const Home = () => {
         <p className={css({color: theme.colors.accent600})}>{currentAccount}</p>
 
         <div>
-          <CardList cards={cards} />
+          <CardList cards={cards} handleBuy={handleBuy} />
         </div>
       </main>
 

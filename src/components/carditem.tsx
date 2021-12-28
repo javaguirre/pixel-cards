@@ -7,10 +7,11 @@ import {
 import { Button } from "baseui/button";
 
 type Props = {
-  card: Card
+  card: Card,
+  handleBuy: (card: Card) => void
 }
 
-function CardItem({ card }: Props) {
+function CardItem({ card, handleBuy }: Props) {
   const avatarUrl = `https://avatars.dicebear.com/api/human/${card.dna}.svg`
 
   return (
@@ -23,7 +24,10 @@ function CardItem({ card }: Props) {
       {card.id} {card.name} {card.price}
     </StyledBody>
     <StyledAction>
-      <Button overrides={{BaseButton: {style: {width: '100%'}}}}>
+      <Button
+        overrides={{BaseButton: {style: {width: '100%'}}}}
+        onClick={() => handleBuy(card)}
+        disabled={Number(card.buyer) ? true : false}>
         Buy for {card.price} ETH
       </Button>
     </StyledAction>

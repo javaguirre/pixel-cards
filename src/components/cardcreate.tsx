@@ -1,12 +1,11 @@
 import { useState } from 'react'
 
-import EthersClient from '../services/ethersclient'
 
 type Props = {
-  handleCreateCard: React.FormEvent
+  handleCreateCard: (cardData: any) => void
 }
 
-function CardCreate({ handleCreateCard }) {
+function CardCreate({ handleCreateCard }: Props) {
   const [cardData, setCardData] = useState({
     name: '',
     price: ''

@@ -5,17 +5,18 @@ import { Card } from '../interfaces'
 import CardItem from './carditem'
 
 type Props = {
-  cards: Card[]
+  cards: Card[],
+  handleBuy: (card: Card) => void
 }
 
-function CardList({ cards }: Props) {
+function CardList({ cards, handleBuy }: Props) {
   return (
      <Outer>
       <Grid>
         {cards.map(card => (
-          <Cell span={[1, 2, 3]}>
+          <Cell key={card.id} span={[1, 2, 3]}>
             <Inner>
-              <CardItem key={card.id} card={card} />
+              <CardItem key={card.id} card={card} handleBuy={handleBuy} />
             </Inner>
           </Cell>
         ))}
