@@ -5,9 +5,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "truffle test && jest",
+    "jest": "jest"
   },
   "dependencies": {
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
     "baseui": "^10.6.0",
     "ethers": "^5.5.2",
     "next": "12.0.7",
