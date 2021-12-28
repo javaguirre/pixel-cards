@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2021.12.28
+
+- Rebuilt using Next, React, and baseweb still a bit refactor needed
 
 ## 2021.12.22
 

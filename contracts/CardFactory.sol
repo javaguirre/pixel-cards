@@ -39,14 +39,20 @@ contract CardFactory {
     function withdraw() external onlyOwner {
         _owner.transfer(address(this).balance);
     }
-    function generateCard(string memory _name, string memory _description, uint _price) public {
-        uint randDna = _generateRandomDna(_name);
-        _createCard(_name, _description, _price, randDna);
+
+    function getBalance() external view onlyOwner returns (uint) {
+        return address(this).balance;
     }
 
-    function _createCard(string memory _name, string memory _description, uint _price, uint _dna) private {
+    function generateCard(string memory _name, string memory _description, uint _price) public returns (uint) {
+        uint randDna = _generateRandomDna(_name);
+        return _createCard(_name, _description, _price, randDna);
+    }
+
+    function _createCard(string memory _name, string memory _description, uint _price, uint _dna) private returns (uint) {
+        uint currentCounter = cardCounter;
         Card memory card = Card(
-            cardCounter,
+            currentCounter,
             _name,
             _description,
             _dna,
@@ -59,6 +65,8 @@ contract CardFactory {
         emit NewCard(cardCounter, _name, _price, _dna);
 
         cardCounter++;
+
+        return currentCounter;
     }
 
     function _generateRandomDna(string memory _name) private view returns (uint) {

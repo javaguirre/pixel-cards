@@ -1,22 +1,32 @@
 {
-  "name": "pixel cards",
-  "version": "0.1.0",
-  "description": "",
-  "main": "truffle.js",
-  "directories": {
-    "test": "test"
-  },
+  "name": "pixel-cards",
+  "private": true,
   "scripts": {
-    "dev": "lite-server",
-    "test": "truffle test",
-    "migrate": "truffle migrate"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "lite-server": "^2.3.0"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "truffle test && jest",
+    "jest": "jest"
   },
   "dependencies": {
-    "@truffle/hdwallet-provider": "^1.7.0"
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "baseui": "^10.6.0",
+    "ethers": "^5.5.2",
+    "next": "12.0.7",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "styletron-engine-atomic": "^1.4.8",
+    "styletron-react": "^6.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.4",
+    "@types/react": "17.0.38",
+    "eslint": "8.5.0",
+    "eslint-config-next": "12.0.7",
+    "jest": "^27.4.5",
+    "testing-library": "^0.0.2",
+    "typescript": "4.5.4"
   }
 }
