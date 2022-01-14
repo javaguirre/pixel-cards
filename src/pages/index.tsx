@@ -6,6 +6,7 @@ import CardList from '../components/cardlist'
 import CardCreate from '../components/cardcreate'
 import EthersClient from '../services/ethersclient'
 import CardService from '../services/cardservice'
+import { Card } from '../interfaces'
 
 const Home = () => {
   const [css, theme] = useStyletron();
@@ -24,17 +25,19 @@ const Home = () => {
   useEffect(() => {
     const ethersClient = new EthersClient(window.ethereum)
 
-    ethersClient.contract.getCardsCounter().then(counter => {
-      const cardPromises = [...Array(counter.toNumber()).keys()].map(
-        index => ethersClient.contract.cards(index))
+    setTimeout(() => {
+      ethersClient.contract.getCardsCounter().then(counter => {
+        const cardPromises = [...Array(counter.toNumber()).keys()].map(
+          index => ethersClient.contract.cards(index))
 
-      Promise.all(cardPromises).then(cardResult => {
-        return cardResult.map(
-          cardFromSmartContract => CardService.transformToCard(cardFromSmartContract)
-        )
-      }).then(currentCards => cards.length !== currentCards.length ?
-              setCards(currentCards) : '')
-    }).catch(error => console.log(error))
+        Promise.all(cardPromises).then(cardResult => {
+          return cardResult.map(
+            cardFromSmartContract => CardService.transformToCard(cardFromSmartContract)
+          )
+        }).then(currentCards => cards.length !== currentCards.length ?
+                setCards(currentCards) : '')
+      }).catch(error => console.log(error))
+    }, 2000)
   }, [cards])
 
   const handleCreateCard = (cardData) => {
@@ -45,7 +48,7 @@ const Home = () => {
     )
   }
 
-  const handleBuy = (card) => {
+  const handleBuy = (card: Card) => {
     const ethersClient = new EthersClient(window.ethereum)
     const signer = ethersClient.contract.connect(ethersClient.provider.getSigner())
     signer.buyCard(card.id, {from: currentAccount, value: card.price}).then(
