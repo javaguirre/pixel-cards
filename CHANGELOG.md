@@ -7,10 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## 2021.12.28
+## 2021.12.29
 
-- Rebuilt using Next, React, and baseweb still a bit refactor needed
-
-## 2021.12.22
-
-- First quick and dirty working version
+- Init the project, adding ERC721 standard from OpenZeppelin
+- Init frontend

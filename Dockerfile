@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 # install dependencies
-RUN npm install
+RUN yarn
 
 # tell the port number the container should expose
 EXPOSE 3000
