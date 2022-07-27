@@ -36,8 +36,6 @@ bower_components
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
-# This only necessary if testing locally
-build/contracts
 
 # Dependency directories
 node_modules/
@@ -72,6 +70,7 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.local
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -104,3 +103,14 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Build Hardhat/Truffle
+build/
+artifacts/
+cache/
+coverage.json
+_site/
+metadata.csv
+
+# Sentry
+.sentryclirc
